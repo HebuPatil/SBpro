@@ -6,7 +6,7 @@ import uvicorn
 from nba_api.live.nba.endpoints import scoreboard, playbyplay
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=".")
 
 # Mount static files if needed
 app.mount("/static", StaticFiles(directory="."), name="static")
