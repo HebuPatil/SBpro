@@ -110,6 +110,11 @@
             border-radius: 4px;
             position: relative;
         }
+        
+        /* League Specific Border Colors */
+        .nfl-theme .pbp-terminal { border-color: var(--accent-nfl); }
+        .nhl-theme .pbp-terminal { border-color: var(--accent-nhl); }
+
         .pbp-header {
             color: var(--accent-nba);
             border-bottom: 1px dashed #30363d;
@@ -120,16 +125,21 @@
             justify-content: space-between;
             align-items: center;
         }
+        
+        .nfl-theme .pbp-header { color: var(--accent-nfl); }
+        .nhl-theme .pbp-header { color: var(--accent-nhl); }
+
         /* Style for the Dropdown */
-        #game-selector {
+        .game-selector {
             background: #000;
-            color: var(--accent-nba);
-            border: 1px solid var(--accent-nba);
+            color: inherit;
+            border: 1px solid currentColor;
             font-family: 'Courier New', Courier, monospace;
             padding: 5px;
             font-size: 0.9rem;
             outline: none;
             cursor: pointer;
+            width: 70%;
         }
         
         .pbp-content {
@@ -143,9 +153,9 @@
             border-bottom: 1px solid #1a1a1a;
             padding-bottom: 4px;
         }
-        .pbp-clock { color: #888; width: 60px; flex-shrink: 0;}
+        .pbp-clock { color: #888; width: 70px; flex-shrink: 0;}
         .pbp-desc { flex: 1; color: #fff; }
-        .pbp-score { color: var(--accent-nba); width: 80px; text-align: right; flex-shrink: 0;}
+        .pbp-score { color: inherit; width: 60px; text-align: right; flex-shrink: 0;}
         
         .blink { animation: blinker 1.5s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
@@ -203,17 +213,71 @@
         <div class="stats-container">
             
             <div id="NBA-stats" class="view-section active nba-theme">
-                
                 <div class="widget-box">
-                    <div class="hud-title">Tactical Play-By-Play</div>
-                    <div class="pbp-terminal" id="nba-pbp-box">
+                    <div class="hud-title">PBP</div>
+                    <div class="pbp-terminal">
                         <div class="pbp-header">
-                            <select id="game-selector" onchange="changeGame()">
+                            <select id="nba-game-selector" class="game-selector" onchange="changeNbaGame()">
                                 <option value="" disabled selected>Select Game Connection...</option>
                             </select>
-                            <span class="blink">● STREAM</span>
+                            <span class="blink">● NBA STREAM</span>
                         </div>
-                        <div class="pbp-content" id="pbp-lines">
+                        <div class="pbp-content" id="nba-pbp-lines">
+                            <div style="padding-top:20px; text-align:center; color:#555;">
+                                SELECT A GAME TO INITIALIZE STREAM...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-box">
+                    <div class="hud-title">Live Feed</div>
+                    <div id="oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-79"><script>window.oddspediaWidgetLiveScorePopularSportsbasketballLeagues379 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.onrender.com", selector: "oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "25", popular: "false", sports: "basketball", leagues: "3:79", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsbasketballLeagues379" async></script></div>
+                </div>
+                <div class="widget-box">
+                    <div class="hud-title">Schedule and Standings</div>
+                    <div id="oddspedia-widget-competition-league-79"><script>window.oddspediaWidgetCompetitionLeague79 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.onrender.com", selector: "oddspedia-widget-competition-league-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", league_id: "79", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague79" async></script></div>
+                </div>
+            </div>
+
+            <div id="NFL-stats" class="view-section nfl-theme">
+                <div class="widget-box">
+                    <div class="hud-title">PBP</div>
+                    <div class="pbp-terminal">
+                        <div class="pbp-header">
+                            <select id="nfl-game-selector" class="game-selector" onchange="changeNflGame()">
+                                <option value="" disabled selected>Select Game Connection...</option>
+                            </select>
+                            <span class="blink">● NFL STREAM</span>
+                        </div>
+                        <div class="pbp-content" id="nfl-pbp-lines">
+                            <div style="padding-top:20px; text-align:center; color:#555;">
+                                SELECT A GAME TO INITIALIZE STREAM...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-box">
+                    <div class="hud-title">Schedule and Standings</div>
+                    <div id="oddspedia-widget-live-score-popular-false-sports-american-football-leagues-6-1991"><script>window.oddspediaWidgetLiveScorePopularSportsamericanfootballLeagues61991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.onrender.com", selector: "oddspedia-widget-live-score-popular-false-sports-american-football-leagues-6-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "25", popular: "false", sports: "american-football", leagues: "6:1991", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsamericanfootballLeagues61991" async></script></div>
+                </div>
+                <div class="widget-box">
+                    <div class="hud-title">NFL Standings</div>
+                    <div id="oddspedia-widget-competition-league-1991"><script>window.oddspediaWidgetCompetitionLeague1991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.onrender.com", selector: "oddspedia-widget-competition-league-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", league_id: "1991", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague1991" async></script></div>
+                </div>
+            </div>
+
+            <div id="NHL-stats" class="view-section nhl-theme">
+                
+                <div class="widget-box">
+                    <div class="hud-title">PBP</div>
+                    <div class="pbp-terminal">
+                        <div class="pbp-header">
+                            <select id="nhl-game-selector" class="game-selector" onchange="changeNhlGame()">
+                                <option value="" disabled selected>Select Game Connection...</option>
+                            </select>
+                            <span class="blink">● NHL STREAM</span>
+                        </div>
+                        <div class="pbp-content" id="nhl-pbp-lines">
                             <div style="padding-top:20px; text-align:center; color:#555;">
                                 SELECT A GAME TO INITIALIZE STREAM...
                             </div>
@@ -223,70 +287,43 @@
 
                 <div class="widget-box">
                     <div class="hud-title">Live Feed</div>
-                    <div id="oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-79"><script>window.oddspediaWidgetLiveScorePopularSportsbasketballLeagues379 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.surge.sh", selector: "oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "25", popular: "false", sports: "basketball", leagues: "3:79", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsbasketballLeagues379" async></script></div>
-                </div>
-                <div class="widget-box">
-                    <div class="hud-title">Schedule and Standings </div>
-                    <div id="oddspedia-widget-competition-league-79"><script>window.oddspediaWidgetCompetitionLeague79 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.surge.sh", selector: "oddspedia-widget-competition-league-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", league_id: "79", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague79" async></script></div>
-                </div>
-            </div>
-
-            <div id="NFL-stats" class="view-section nfl-theme">
-                <div class="widget-box">
-                    <div class="hud-title">Live Feed</div>
-                    <div id="oddspedia-widget-live-score-popular-false-sports-american-football-leagues-6-1991"><script>window.oddspediaWidgetLiveScorePopularSportsamericanfootballLeagues61991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.surge.sh", selector: "oddspedia-widget-live-score-popular-false-sports-american-football-leagues-6-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "25", popular: "false", sports: "american-football", leagues: "6:1991", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsamericanfootballLeagues61991" async></script></div>
-                </div>
-                <div class="widget-box">
-                    <div class="hud-title">NFL Standings</div>
-                    <div id="oddspedia-widget-competition-league-1991"><script>window.oddspediaWidgetCompetitionLeague1991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.surge.sh", selector: "oddspedia-widget-competition-league-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", league_id: "1991", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague1991" async></script></div>
-                </div>
-            </div>
-
-            <div id="NHL-stats" class="view-section nhl-theme">
-                <div class="widget-box">
-                    <div class="hud-title">Live Feed</div>
-                    <div id="oddspedia-widget-live-score-popular-false-sports-ice-hockey-leagues-2-327"><script>window.oddspediaWidgetLiveScorePopularSportsicehockeyLeagues2327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.surge.sh", selector: "oddspedia-widget-live-score-popular-false-sports-ice-hockey-leagues-2-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "15", popular: "false", sports: "ice-hockey", leagues: "2:327", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsicehockeyLeagues2327" async></script></div>
+                    <div id="oddspedia-widget-live-score-popular-false-sports-ice-hockey-leagues-2-327"><script>window.oddspediaWidgetLiveScorePopularSportsicehockeyLeagues2327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.onrender.com", selector: "oddspedia-widget-live-score-popular-false-sports-ice-hockey-leagues-2-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "15", popular: "false", sports: "ice-hockey", leagues: "2:327", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsicehockeyLeagues2327" async></script></div>
                 </div>
                 <div class="widget-box">
                     <div class="hud-title">Schedule and Standings</div>
-                    <div id="oddspedia-widget-competition-league-327"><script>window.oddspediaWidgetCompetitionLeague327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.surge.sh", selector: "oddspedia-widget-competition-league-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", league_id: "327", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague327" async></script></div>
+                    <div id="oddspedia-widget-competition-league-327"><script>window.oddspediaWidgetCompetitionLeague327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.onrender.com", selector: "oddspedia-widget-competition-league-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", league_id: "327", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague327" async></script></div>
                 </div>
             </div>
 
             <div id="NCAA-stats" class="view-section ncaa-theme">
                 <div class="widget-box">
                     <div class="hud-title">Live Feed</div>
-                    <div id="oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-2476"><script>window.oddspediaWidgetLiveScorePopularSportsbasketballLeagues32476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.surge.sh", selector: "oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "15", popular: "false", sports: "basketball", leagues: "3:2476", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsbasketballLeagues32476" async></script></div>
+                    <div id="oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-2476"><script>window.oddspediaWidgetLiveScorePopularSportsbasketballLeagues32476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "live-score", domain: "sbpro.onrender.com", selector: "oddspedia-widget-live-score-popular-false-sports-basketball-leagues-3-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", logos: "true", inplay_only: "true", extended_match_info: "true", live_stream: "false", limit: "15", popular: "false", sports: "basketball", leagues: "3:2476", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetLiveScorePopularSportsbasketballLeagues32476" async></script></div>
                 </div>
                 <div class="widget-box">
                     <div class="hud-title">Schedule and Standings</div>
-                    <div id="oddspedia-widget-competition-league-2476"><script>window.oddspediaWidgetCompetitionLeague2476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.surge.sh", selector: "oddspedia-widget-competition-league-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", league_id: "2476", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague2476" async></script></div>
+                    <div id="oddspedia-widget-competition-league-2476"><script>window.oddspediaWidgetCompetitionLeague2476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "competition", domain: "sbpro.onrender.com", selector: "oddspedia-widget-competition-league-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", league_id: "2476", limit: "8", show_odds: "true", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetCompetitionLeague2476" async></script></div>
                 </div>
             </div>
         </div>
 
         <div class="odds-container">
-            
             <div id="NBA-odds" class="view-section active nba-theme">
                 <div class="hud-title">NBA Markets</div>
-                <div id="oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-79"><script>window.oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues379 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.surge.sh", selector: "oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "basketball", leagues: "3:79", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues379" async></script></div>
+                <div id="oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-79"><script>window.oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues379 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.onrender.com", selector: "oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-79", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ff6b6b", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "basketball", leagues: "3:79", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues379" async></script></div>
             </div>
-
             <div id="NFL-odds" class="view-section nfl-theme">
                 <div class="hud-title">NFL Markets</div>
-                <div id="oddspedia-widget-odds-comparison-popular-false-sports-american-football-leagues-6-1991"><script>window.oddspediaWidgetOddsComparisonPopularSportsamericanfootballLeagues61991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.surge.sh", selector: "oddspedia-widget-odds-comparison-popular-false-sports-american-football-leagues-6-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "american-football", leagues: "6:1991", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsamericanfootballLeagues61991" async></script></div>
+                <div id="oddspedia-widget-odds-comparison-popular-false-sports-american-football-leagues-6-1991"><script>window.oddspediaWidgetOddsComparisonPopularSportsamericanfootballLeagues61991 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.onrender.com", selector: "oddspedia-widget-odds-comparison-popular-false-sports-american-football-leagues-6-1991", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#4ecdc4", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "american-football", leagues: "6:1991", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsamericanfootballLeagues61991" async></script></div>
             </div>
-
             <div id="NHL-odds" class="view-section nhl-theme">
                 <div class="hud-title">NHL Markets</div>
-                <div id="oddspedia-widget-odds-comparison-popular-false-sports-ice-hockey-leagues-2-327"><script>window.oddspediaWidgetOddsComparisonPopularSportsicehockeyLeagues2327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.surge.sh", selector: "oddspedia-widget-odds-comparison-popular-false-sports-ice-hockey-leagues-2-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "ice-hockey", leagues: "2:327", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsicehockeyLeagues2327" async></script></div>
+                <div id="oddspedia-widget-odds-comparison-popular-false-sports-ice-hockey-leagues-2-327"><script>window.oddspediaWidgetOddsComparisonPopularSportsicehockeyLeagues2327 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.onrender.com", selector: "oddspedia-widget-odds-comparison-popular-false-sports-ice-hockey-leagues-2-327", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#ffe66d", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "ice-hockey", leagues: "2:327", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsicehockeyLeagues2327" async></script></div>
             </div>
-
             <div id="NCAA-odds" class="view-section ncaa-theme">
                 <div class="hud-title">NCAA Markets</div>
-                <div id="oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-2476"><script>window.oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues32476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.surge.sh", selector: "oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "basketball", leagues: "3:2476", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues32476" async></script></div>
+                <div id="oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-2476"><script>window.oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues32476 = { api_token: "329a6f6eeaf5a47effaee8591a6d3ba277f3c03d164c278fc0c06408d3d0", type: "odds-comparison", domain: "sbpro.onrender.com", selector: "oddspedia-widget-odds-comparison-popular-false-sports-basketball-leagues-3-2476", width: "0", theme: "1", odds_type: "1", language: "en", primary_color: "#161b22", accent_color: "#f97316", font: "Courier New", logos: "true", limit: "10", popular: "false", sports: "basketball", leagues: "3:2476", };</script><a href="https://oddspedia.com" target="_blank" >Powered by</a><script src="https://widgets.oddspedia.com/js/widget/init.js?widgetId=oddspediaWidgetOddsComparisonPopularSportsbasketballLeagues32476" async></script></div>
             </div>
-
         </div>
     </div>
 
@@ -295,15 +332,17 @@
             <span class="author-text">Made by hbzy</span>
             <span class="separator">|</span>
             <a href="https://oddspedia.com" target="_blank" rel="nofollow" class="oddspedia-link">
-                <img src="oddspedia.svg" alt="Oddspedia Logo" class="oddspedia-logo">
+                <img src="/static/oddspedia.svg" alt="Oddspedia Logo" class="oddspedia-logo">
                 <span>Data powered by Oddspedia</span>
             </a>
         </div>
     </footer>
 
     <script>
-        // Global var to store current game ID
-        let selectedGameId = null;
+        // Store selected Game IDs
+        let selectedNbaGameId = null;
+        let selectedNflGameId = null;
+        let selectedNhlGameId = null;
 
         function switchTab(league) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -313,77 +352,149 @@
             const oddsPanel = document.getElementById(`${league}-odds`);
             if(oddsPanel) oddsPanel.classList.add('active');
 
+            // Trigger PBP logic
             if (league === 'NBA') {
-                populateGameList();
-                if (selectedGameId) updateNbaPbp();
+                populateNbaGameList();
+                if (selectedNbaGameId) updateNbaPbp();
+            }
+            if (league === 'NFL') {
+                populateNflGameList();
+                if (selectedNflGameId) updateNflPbp();
+            }
+            if (league === 'NHL') {
+                populateNhlGameList();
+                if (selectedNhlGameId) updateNhlPbp();
             }
         }
 
-        // 1. Fetch Games for Dropdown
-        async function populateGameList() {
-            const selector = document.getElementById('game-selector');
-            if (selector.options.length > 1) return; // Already populated
-
+        // ========================
+        // NBA LOGIC
+        // ========================
+        async function populateNbaGameList() {
+            const selector = document.getElementById('nba-game-selector');
+            if (selector.options.length > 1) return; 
             try {
                 const res = await fetch('/api/nba/games');
                 const games = await res.json();
-                
                 games.forEach(game => {
                     const option = document.createElement('option');
                     option.value = game.gameId;
                     option.text = `[${game.status}] ${game.matchup}`;
                     selector.appendChild(option);
                 });
-            } catch (err) {
-                console.log("Error loading game list");
-            }
+            } catch (err) { console.log("Error loading NBA list"); }
         }
-
-        // 2. Handle Dropdown Change
-        function changeGame() {
-            const selector = document.getElementById('game-selector');
-            selectedGameId = selector.value;
-            // Update immediately on change
+        function changeNbaGame() {
+            selectedNbaGameId = document.getElementById('nba-game-selector').value;
             updateNbaPbp();
         }
-
-        // 3. Update PBP (uses selectedGameId)
         async function updateNbaPbp() {
             if (!document.getElementById('NBA-stats').classList.contains('active')) return;
-            if (!selectedGameId) return;
-
+            if (!selectedNbaGameId) return;
             try {
-                const res = await fetch(`/api/nba/pbp?gameId=${selectedGameId}`);
+                const res = await fetch(`/api/nba/pbp?gameId=${selectedNbaGameId}`);
                 const data = await res.json();
-                
-                const box = document.getElementById('pbp-lines');
-                
+                const box = document.getElementById('nba-pbp-lines');
                 if (!data.active) {
                     box.innerHTML = `<div style="padding-top:20px; text-align:center; color:#555;">${data.message}</div>`;
                 } else {
                     let html = '';
                     data.plays.forEach(play => {
-                        html += `
-                        <div class="pbp-line">
-                            <div class="pbp-clock">${play.clock}</div>
-                            <div class="pbp-desc">
-                                <span style="color:#fff">[${play.team}]</span> 
-                                ${play.desc}
-                            </div>
-                            <div class="pbp-score">${play.score}</div>
-                        </div>`;
+                        html += `<div class="pbp-line"><div class="pbp-clock">${play.clock}</div><div class="pbp-desc"><span style="color:#fff">[${play.team}]</span> ${play.desc}</div><div class="pbp-score">${play.score}</div></div>`;
                     });
                     box.innerHTML = html;
                 }
-            } catch (err) {
-                console.log("PBP Fetch Error:", err);
-            }
+            } catch (err) { console.log("NBA PBP Fetch Error"); }
         }
 
-        // Poll PBP every 5 seconds
-        setInterval(updateNbaPbp, 5000);
+        // ========================
+        // NFL LOGIC
+        // ========================
+        async function populateNflGameList() {
+            const selector = document.getElementById('nfl-game-selector');
+            if (selector.options.length > 1) return; 
+            try {
+                const res = await fetch('/api/nfl/games');
+                const games = await res.json();
+                games.forEach(game => {
+                    const option = document.createElement('option');
+                    option.value = game.gameId;
+                    option.text = `[${game.status}] ${game.matchup}`;
+                    selector.appendChild(option);
+                });
+            } catch (err) { console.log("Error loading NFL list"); }
+        }
+        function changeNflGame() {
+            selectedNflGameId = document.getElementById('nfl-game-selector').value;
+            updateNflPbp();
+        }
+        async function updateNflPbp() {
+            if (!document.getElementById('NFL-stats').classList.contains('active')) return;
+            if (!selectedNflGameId) return;
+            try {
+                const res = await fetch(`/api/nfl/pbp?gameId=${selectedNflGameId}`);
+                const data = await res.json();
+                const box = document.getElementById('nfl-pbp-lines');
+                if (!data.active) {
+                    box.innerHTML = `<div style="padding-top:20px; text-align:center; color:#555;">${data.message}</div>`;
+                } else {
+                    let html = '';
+                    data.plays.forEach(play => {
+                        html += `<div class="pbp-line"><div class="pbp-clock">${play.clock}</div><div class="pbp-desc"><span style="color:#fff">[${play.team}]</span> ${play.desc}</div><div class="pbp-score">${play.score}</div></div>`;
+                    });
+                    box.innerHTML = html;
+                }
+            } catch (err) { console.log("NFL PBP Fetch Error"); }
+        }
 
-        // Initialize: Open NBA by default
+        // ========================
+        // NHL LOGIC (New)
+        // ========================
+        async function populateNhlGameList() {
+            const selector = document.getElementById('nhl-game-selector');
+            if (selector.options.length > 1) return; 
+            try {
+                const res = await fetch('/api/nhl/games');
+                const games = await res.json();
+                games.forEach(game => {
+                    const option = document.createElement('option');
+                    option.value = game.gameId;
+                    option.text = `[${game.status}] ${game.matchup}`;
+                    selector.appendChild(option);
+                });
+            } catch (err) { console.log("Error loading NHL list"); }
+        }
+        function changeNhlGame() {
+            selectedNhlGameId = document.getElementById('nhl-game-selector').value;
+            updateNhlPbp();
+        }
+        async function updateNhlPbp() {
+            if (!document.getElementById('NHL-stats').classList.contains('active')) return;
+            if (!selectedNhlGameId) return;
+            try {
+                const res = await fetch(`/api/nhl/pbp?gameId=${selectedNhlGameId}`);
+                const data = await res.json();
+                const box = document.getElementById('nhl-pbp-lines');
+                if (!data.active) {
+                    box.innerHTML = `<div style="padding-top:20px; text-align:center; color:#555;">${data.message}</div>`;
+                } else {
+                    let html = '';
+                    data.plays.forEach(play => {
+                        html += `<div class="pbp-line"><div class="pbp-clock">${play.clock}</div><div class="pbp-desc"><span style="color:#fff">[${play.team}]</span> ${play.desc}</div><div class="pbp-score">${play.score}</div></div>`;
+                    });
+                    box.innerHTML = html;
+                }
+            } catch (err) { console.log("NHL PBP Fetch Error"); }
+        }
+
+        // Global Loop
+        setInterval(() => {
+            updateNbaPbp();
+            updateNflPbp();
+            updateNhlPbp();
+        }, 5000);
+
+        // Init
         switchTab('NBA');
     </script>
 </body>
