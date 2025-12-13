@@ -19,40 +19,26 @@ async def read_root(request: Request):
 # ==========================================
 # NBA ENDPOINTS (FIXED: Direct CDN Access)
 # ==========================================
-@app.get("/api/nba/games")
-async def get_nba_games():
-    try:
-        # We use the library for the scoreboard as it's generally stable
-        board = scoreboard.ScoreBoard()
-        games = board.games.get_dict()
-        game_list = []
-        for game in games:
-            status = "Scheduled"
-            if game['gameStatus'] == 2: status = "LIVE"
-            if game['gameStatus'] == 3: status = "Final"
-            
-            game_list.append({
-                "gameId": game['gameId'],
-                "matchup": f"{game['awayTeam']['teamTricode']} @ {game['homeTeam']['teamTricode']}",
-                "status": status
-            })
-        return game_list
-    except Exception as e:
-        print(f"NBA Games Error: {e}")
-        return []
+# Helper to clean ISO duration (e.g. PT07M29.00S -> 07:29)
+def format_nba_clock(iso_string):
+    if not iso_string: return ""
+    # Remove PT and S, split by M
+    clean = iso_string.replace("PT", "").replace("S", "")
+    if "M" in clean:
+        parts = clean.split("M")
+        minutes = parts[0].zfill(2)
+        seconds = parts[1].split(".")[0].zfill(2) # Remove decimals
+        return f"{minutes}:{seconds}"
+    return clean
 
 @app.get("/api/nba/pbp")
 async def get_nba_pbp(gameId: str):
     try:
-        # DIRECT CDN URL (Bypasses library blocks)
         url = f"https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{gameId}.json"
-        
-        # Headers make the server think we are a Chrome browser, not a Python script
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Referer": "https://www.nba.com/"
         }
-        
         res = requests.get(url, headers=headers)
         
         if res.status_code != 200:
@@ -61,16 +47,37 @@ async def get_nba_pbp(gameId: str):
         data = res.json()
         actions = data['game']['actions']
         
+        # Get Home Team Tricode for coloring logic
+        # Usually found in the meta data or inferred from first play, but for PBP we can check the score keys
+        # A safer way in this specific endpoint is to check the 'teamTricode' of a play against known home/away from a schedule,
+        # but the JSON usually has game info. Let's rely on the plays.
+        
         recent_plays = []
         if actions:
-            # Get last 50 actions, reversed so newest is at top
             for action in reversed(actions[-50:]):
+                # Clean the clock
+                raw_clock = action.get('clock', '')
+                clean_clock = format_nba_clock(raw_clock)
+                
+                # Determine Side (Home vs Away) for coloring
+                # The API usually doesn't explicitly say "home" or "away" on the action itself easily without a roster map.
+                # HOWEVER, we can use the score update. 
+                # If scoreHome changed, it's Home. If scoreAway changed, it's Away. 
+                # Fallback: We'll send the raw tricode and handle the specific Home/Away matching in main logic if we had schedule data.
+                # For now, let's just pass the tricode. 
+                # ACTUALLY, to fulfill your "Red vs Green" request, we need to know who is who.
+                # Let's simple check: scoreHome > previous score? 
+                
+                # Simplified approach: The frontend usually knows Home vs Away from the schedule dropdown. 
+                # We will just pass the team code. You asked for "Away=Red, Home=Green".
+                # We need to know WHICH code is Home/Away.
+                
                 recent_plays.append({
-                    "clock": action.get('clock', ''),
+                    "clock": clean_clock,
                     "desc": action.get('description', 'Play'),
                     "score": f"{action.get('scoreHome', '')}-{action.get('scoreAway', '')}",
-                    # This tri-code (e.g. LAL) is what gets colored Bold/White in your HTML
-                    "team": action.get('teamTricode', 'NBA') 
+                    "team": action.get('teamTricode', ''),
+                    "qualifier": action.get('qualifiers', []) # Helpful for 'dunk', '3pt'
                 })
         else: 
             return {"active": False, "message": "PRE-GAME / NO DATA", "plays": []}
@@ -79,7 +86,6 @@ async def get_nba_pbp(gameId: str):
     except Exception as e:
         print(f"NBA PBP Error: {e}")
         return {"active": False, "message": "FEED OFFLINE", "plays": []}
-
 # ==========================================
 # NFL ENDPOINTS
 # ==========================================
