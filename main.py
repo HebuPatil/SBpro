@@ -30,6 +30,31 @@ def format_nba_clock(iso_string):
         seconds = parts[1].split(".")[0].zfill(2) # Remove decimals
         return f"{minutes}:{seconds}"
     return clean
+# ==========================================
+# INSERT THIS MISSING ENDPOINT
+# ==========================================
+@app.get("/api/nba/games")
+async def get_nba_games():
+    try:
+        # specific NBA CDN endpoint for today's scoreboard
+        url = "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json"
+        res = requests.get(url).json()
+        
+        game_list = []
+        for game in res['scoreboard']['games']:
+            # Map status code: 1=Sched, 2=Live, 3=Final
+            status_map = {1: "SCHED", 2: "LIVE", 3: "FINAL"}
+            status = status_map.get(game['gameStatus'], "SCHED")
+            
+            game_list.append({
+                "gameId": game['gameId'],
+                "matchup": f"{game['awayTeam']['teamTricode']} @ {game['homeTeam']['teamTricode']}",
+                "status": status
+            })
+        return game_list
+    except Exception as e:
+        print(f"NBA Games List Error: {e}")
+        return []
 
 @app.get("/api/nba/pbp")
 async def get_nba_pbp(gameId: str):
