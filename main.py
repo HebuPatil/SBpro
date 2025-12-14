@@ -72,37 +72,19 @@ async def get_nba_pbp(gameId: str):
         data = res.json()
         actions = data['game']['actions']
         
-        # Get Home Team Tricode for coloring logic
-        # Usually found in the meta data or inferred from first play, but for PBP we can check the score keys
-        # A safer way in this specific endpoint is to check the 'teamTricode' of a play against known home/away from a schedule,
-        # but the JSON usually has game info. Let's rely on the plays.
-        
         recent_plays = []
         if actions:
             for action in reversed(actions[-50:]):
-                # Clean the clock
                 raw_clock = action.get('clock', '')
                 clean_clock = format_nba_clock(raw_clock)
-                
-                # Determine Side (Home vs Away) for coloring
-                # The API usually doesn't explicitly say "home" or "away" on the action itself easily without a roster map.
-                # HOWEVER, we can use the score update. 
-                # If scoreHome changed, it's Home. If scoreAway changed, it's Away. 
-                # Fallback: We'll send the raw tricode and handle the specific Home/Away matching in main logic if we had schedule data.
-                # For now, let's just pass the tricode. 
-                # ACTUALLY, to fulfill your "Red vs Green" request, we need to know who is who.
-                # Let's simple check: scoreHome > previous score? 
-                
-                # Simplified approach: The frontend usually knows Home vs Away from the schedule dropdown. 
-                # We will just pass the team code. You asked for "Away=Red, Home=Green".
-                # We need to know WHICH code is Home/Away.
                 
                 recent_plays.append({
                     "clock": clean_clock,
                     "desc": action.get('description', 'Play'),
                     "score": f"{action.get('scoreHome', '')}-{action.get('scoreAway', '')}",
                     "team": action.get('teamTricode', ''),
-                    "qualifier": action.get('qualifiers', []) # Helpful for 'dunk', '3pt'
+                    "period": action.get('period', 1), # <--- Added Period Here
+                    "qualifier": action.get('qualifiers', [])
                 })
         else: 
             return {"active": False, "message": "PRE-GAME / NO DATA", "plays": []}
